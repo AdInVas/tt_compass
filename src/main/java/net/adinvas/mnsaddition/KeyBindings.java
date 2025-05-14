@@ -8,7 +8,7 @@ import org.lwjgl.glfw.GLFW;
 public class KeyBindings {
     public static final String KEY_CATEGORY = "key.categories.mnsaddition";
 
-    public static final KeyMapping TOGGLE_COMPASS = new KeyMapping("key.mnsaddition.toggle",
+    public static final KeyMapping TOGGLE_COMPASS = new KeyMapping("key.mnsaddition.toggle_compass",
             KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_Y,
