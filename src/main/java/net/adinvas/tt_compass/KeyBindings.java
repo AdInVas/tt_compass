@@ -1,4 +1,4 @@
-package net.adinvas.mnsaddition;
+package net.adinvas.tt_compass;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
