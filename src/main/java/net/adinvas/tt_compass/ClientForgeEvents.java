@@ -1,8 +1,6 @@
 package net.adinvas.tt_compass;
 
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +12,6 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = "tt_compass", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientForgeEvents {
-
     public static void register(){
         TTCompass.LOGGER.info("Yaw overlay registered!");
     }
@@ -33,9 +30,10 @@ public class ClientForgeEvents {
     }
 
         public static class CompassObject {
-            public static final ResourceLocation SPRITES = new ResourceLocation("mnsaddition","textures/gui/compass_sprite_x8.png");
-            public static final int FRAME_WIDTH = 32;
-            public static final int FRAME_HEIGHT = 32;
+            public static final ResourceLocation SPRITES = new ResourceLocation("mnsaddition","textures/gui/line_compass.png");
+            //public static final  ResourceLocation ALPHA_MASK = new ResourceLocation("mnsaddition","textures/gui/compass_mask.png");
+            public static final int TXT_WIDTH = 720;
+            public static final int TXT_HEIGHT = 32;
         }
 
 
@@ -53,29 +51,35 @@ public class ClientForgeEvents {
                     yaw +=360;
                 }
 
-                String display = ""+Math.floor(yaw*10)/10;
+                String display = ""+(int)yaw;
 
                 GuiGraphics gui = event.getGuiGraphics();
-                PoseStack pose = gui.pose();
                 int screen_width = mc.getWindow().getGuiScaledWidth();
-                int screen_height = mc.getWindow().getGuiScaledHeight();
                 var font = mc.font;
 
                 int x= screen_width /2;
-                int y= screen_height -49;
-
-                int frameindex = (int) (8-Math.floor((yaw+22.5f)/45f));
-                int u = frameindex * CompassObject.FRAME_WIDTH;
-                int v =0;
+                int y= 1 ;
 
 
+
+
+
+
+                float pxPerDeg = 2f;
+                float displayWidth = 256f;
+
+
+                float scrollU = (yaw * pxPerDeg) - (displayWidth / 2f);
                 if (COMPASS_OVERLAY) {
-                    pose.pushPose();
-                    pose.scale(0.5f,0.5f,1f);
-                    RenderSystem.setShaderTexture(0,CompassObject.SPRITES);
-                    gui.blit(CompassObject.SPRITES,x*2-16,y*2,u,v,CompassObject.FRAME_WIDTH,CompassObject.FRAME_HEIGHT,256,32);
-                    pose.popPose();
-                    gui.drawString(font, display, x-10, y-5, 0xFFFFFF);
+                    gui.blit(CompassObject.SPRITES, x-128, y, (int) scrollU, 0, (int) displayWidth, 32, CompassObject.TXT_WIDTH, CompassObject.TXT_HEIGHT);
+                    int string_correction = 3;
+                    if (yaw>10){
+                        string_correction +=3;
+                    }
+                    if (yaw>100){
+                        string_correction +=3;
+                    }
+                    gui.drawString(font, display, x-string_correction, y+35, 0xFFFFFF);
                 }
             }
     }

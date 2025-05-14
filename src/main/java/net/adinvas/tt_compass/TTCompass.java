@@ -52,5 +52,7 @@ public class TTCompass {
         public static void onKeyRegister(RegisterKeyMappingsEvent event) {
             event.register(KeyBindings.TOGGLE_COMPASS);
         }
+
+
     }
 }
