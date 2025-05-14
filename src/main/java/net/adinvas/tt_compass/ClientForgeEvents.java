@@ -58,7 +58,7 @@ public class ClientForgeEvents {
                 var font = mc.font;
 
                 int x= screen_width /2;
-                int y= 1 ;
+                int y= 15 ;
 
 
 
@@ -66,12 +66,12 @@ public class ClientForgeEvents {
 
 
                 float pxPerDeg = 2f;
-                float displayWidth = 256f;
+                float displayWidth = 180f;
 
 
                 float scrollU = (yaw * pxPerDeg) - (displayWidth / 2f);
                 if (COMPASS_OVERLAY) {
-                    gui.blit(CompassObject.SPRITES, x-128, y, (int) scrollU, 0, (int) displayWidth, 32, CompassObject.TXT_WIDTH, CompassObject.TXT_HEIGHT);
+                    gui.blit(CompassObject.SPRITES, x-90, y, (int) scrollU, 0, (int) displayWidth, 32, CompassObject.TXT_WIDTH, CompassObject.TXT_HEIGHT);
                     int string_correction = 3;
                     if (yaw>10){
                         string_correction +=3;
