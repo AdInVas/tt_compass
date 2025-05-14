@@ -5,11 +5,13 @@ import net.adinvas.mnsaddition.item.ModCreativeModeTabs;
 import net.adinvas.mnsaddition.item.ModItems;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -23,7 +25,7 @@ public class MnsAddition
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "mnsaddition";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public MnsAddition(FMLJavaModLoadingContext context)
     {
@@ -32,6 +34,7 @@ public class MnsAddition
         ModCreativeModeTabs.register(modEventBus);
 
         ModItems.register(modEventBus);
+
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -42,7 +45,9 @@ public class MnsAddition
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
+        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us'
+
+        DistExecutor.safeRunWhenOn(Dist.CLIENT,()-> ClientForgeEvents::register);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -73,6 +78,10 @@ public class MnsAddition
         public static void onClientSetup(FMLClientSetupEvent event)
         {
 
+        }
+        @SubscribeEvent
+        public static void onKeyRegister(RegisterKeyMappingsEvent event){
+            event.register(KeyBindings.TOGGLE_COMPASS);
         }
     }
 }
