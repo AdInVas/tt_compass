@@ -1,4 +1,4 @@
-package net.adinvas.mnsaddition;
+package net.adinvas.tt_compass;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -12,11 +12,11 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = "mnsaddition", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = "tt_compass", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientForgeEvents {
 
     public static void register(){
-        MnsAddition.LOGGER.info("Yaw overlay registered!");
+        TTCompass.LOGGER.info("Yaw overlay registered!");
     }
 
     public static boolean COMPASS_OVERLAY = true;
@@ -33,7 +33,7 @@ public class ClientForgeEvents {
     }
 
         public static class CompassObject {
-            public static final ResourceLocation SPRITES = ResourceLocation.fromNamespaceAndPath("mnsaddition","textures/gui/compass_sprite_x8.png");
+            public static final ResourceLocation SPRITES = new ResourceLocation("mnsaddition","textures/gui/compass_sprite_x8.png");
             public static final int FRAME_WIDTH = 32;
             public static final int FRAME_HEIGHT = 32;
         }
