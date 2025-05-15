@@ -49,6 +49,7 @@ public class ClientForgeEvents {
         public static void onRenderOverlay(RenderGuiOverlayEvent.Post event){
             Minecraft mc = Minecraft.getInstance();
             if (mc.player !=null){
+
                 HitResult Raycast = mc.player.pick(0.005f,0,false);
                 Vec3 endlocation = Raycast.getLocation();
                 Vec3 startlocation = mc.player.getEyePosition(0f);
@@ -56,7 +57,7 @@ public class ClientForgeEvents {
                         .subtract(startlocation)
                         .multiply(1,0,1);
                 double yaw = Math.toDegrees(Math.atan2(direction.z, direction.x)) +90;
-
+                if(!mc.player.isPassenger()){yaw = mc.player.getYRot();}
                 yaw = yaw %360;
                 if (yaw<0){
                     yaw +=360;
