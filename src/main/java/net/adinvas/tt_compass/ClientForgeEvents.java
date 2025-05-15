@@ -1,14 +1,20 @@
 package net.adinvas.tt_compass;
 
 
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.HitResult;
+
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+
 
 @Mod.EventBusSubscriber(modid = "tt_compass", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientForgeEvents {
@@ -42,9 +48,14 @@ public class ClientForgeEvents {
         @SubscribeEvent
         public static void onRenderOverlay(RenderGuiOverlayEvent.Post event){
             Minecraft mc = Minecraft.getInstance();
-
             if (mc.player !=null){
-                float yaw = mc.player.getYRot() +180;
+                HitResult Raycast = mc.player.pick(0.005f,0,false);
+                Vec3 endlocation = Raycast.getLocation();
+                Vec3 startlocation = mc.player.getEyePosition(0f);
+                Vec3 direction = endlocation
+                        .subtract(startlocation)
+                        .multiply(1,0,1);
+                double yaw = Math.toDegrees(Math.atan2(direction.z, direction.x)) +90;
 
                 yaw = yaw %360;
                 if (yaw<0){
@@ -69,7 +80,7 @@ public class ClientForgeEvents {
                 float displayWidth = 180f;
 
 
-                float scrollU = (yaw * pxPerDeg) - (displayWidth / 2f);
+                double scrollU = (yaw * pxPerDeg) - (displayWidth / 2f);
                 if (COMPASS_OVERLAY) {
                     gui.blit(CompassObject.SPRITES, x-90, y, (int) scrollU, 0, (int) displayWidth, 32, CompassObject.TXT_WIDTH, CompassObject.TXT_HEIGHT);
                     int string_correction = 3;
