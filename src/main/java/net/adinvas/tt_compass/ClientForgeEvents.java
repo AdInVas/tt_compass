@@ -57,7 +57,7 @@ public class ClientForgeEvents {
                         .subtract(startlocation)
                         .multiply(1,0,1);
                 double yaw = Math.toDegrees(Math.atan2(direction.z, direction.x)) +90;
-                if(!mc.player.isPassenger()){yaw = mc.player.getYRot();}
+                if(!mc.player.isPassenger()){yaw = mc.player.getYRot()+180;}
                 yaw = yaw %360;
                 if (yaw<0){
                     yaw +=360;
