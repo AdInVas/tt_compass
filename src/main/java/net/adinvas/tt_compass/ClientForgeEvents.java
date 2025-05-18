@@ -2,8 +2,11 @@ package net.adinvas.tt_compass;
 
 
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+
 import net.minecraft.client.gui.GuiGraphics;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.HitResult;
 
@@ -22,15 +25,13 @@ public class ClientForgeEvents {
         TTCompass.LOGGER.info("Yaw overlay registered!");
     }
 
-    public static boolean COMPASS_OVERLAY = true;
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event){
         if (event.phase == TickEvent.Phase.END){
             if (KeyBindings.TOGGLE_COMPASS.isDown()){
-                KeyBindings.TOGGLE_COMPASS.setDown(false);
                 KeyBindings.TOGGLE_COMPASS.consumeClick();
-                COMPASS_OVERLAY = !COMPASS_OVERLAY;
+                Minecraft.getInstance().setScreen(new ConfigScreen(Minecraft.getInstance().screen));
             }
         }
     }
@@ -70,7 +71,7 @@ public class ClientForgeEvents {
                 var font = mc.font;
 
                 int x= screen_width /2;
-                int y= 15 ;
+                int y= CompassConfig.CLIENT.compassFromTop.get();
 
 
 
@@ -78,12 +79,14 @@ public class ClientForgeEvents {
 
 
                 float pxPerDeg = 2f;
-                float displayWidth = 180f;
+                float displayWidth = CompassConfig.CLIENT.compassWidth.get();
 
 
                 double scrollU = (yaw * pxPerDeg) - (displayWidth / 2f);
-                if (COMPASS_OVERLAY) {
-                    gui.blit(CompassObject.SPRITES, x-90, y, (int) scrollU, 0, (int) displayWidth, 32, CompassObject.TXT_WIDTH, CompassObject.TXT_HEIGHT);
+                if (CompassConfig.CLIENT.enableCompass.get()) {
+                    RenderSystem.enableBlend();
+                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, (float) CompassConfig.CLIENT.compassOpacity.get()/1000);
+                    gui.blit(CompassObject.SPRITES, x-((int)displayWidth/2), y, (int) scrollU, 0, (int) displayWidth, 32, CompassObject.TXT_WIDTH, CompassObject.TXT_HEIGHT);
                     int string_correction = 3;
                     if (yaw>10){
                         string_correction +=3;
@@ -91,7 +94,9 @@ public class ClientForgeEvents {
                     if (yaw>100){
                         string_correction +=3;
                     }
+                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                     gui.drawString(font, display, x-string_correction, y+35, 0xFFFFFF);
+                    RenderSystem.disableBlend();
                 }
             }
     }
